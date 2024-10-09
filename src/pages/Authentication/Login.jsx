@@ -1,7 +1,7 @@
 import { Button, TextField } from "@mui/material";
 import { ErrorMessage, Field, Form, Formik } from "formik";
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
 import { loginUserAction } from "../../Redux/Auth/auth.action";
 import { useNavigate } from "react-router-dom";
@@ -16,6 +16,16 @@ const Login = () => {
   const [formValue, setFormValue] = useState();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { auth } = useSelector((store) => store);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  useEffect(() => {
+    if (auth) {
+      const message = auth.error?.response?.data?.message || auth.error;
+      if (message !== "invalid token ...")
+      setErrorMessage(message);
+    }
+  }, [auth]);
 
   const handleSubmit = (values) => {
     console.log("handle submit", values);
@@ -71,6 +81,9 @@ const Login = () => {
           >
             Login
           </Button>
+          {errorMessage && (
+            <div className="text-red-500 mt-2">{errorMessage}</div>
+          )}
         </Form>
       </Formik>
       <div className="flex gap-2 items-center justify-center pt-5">
