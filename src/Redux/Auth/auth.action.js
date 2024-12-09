@@ -86,7 +86,7 @@ export const searchUser = (query) => async (dispatch) => {
     }
 }
 
-export const resetAuthAction = () => async (dispatch) => {
-    // return { type: RESET_AUTH }
-    dispatch({ type: RESET_AUTH });
+export const resetAuthAction = () => (dispatch) => {
+    localStorage.removeItem('jwt'); 
+    dispatch({ type: RESET_AUTH });  
   };

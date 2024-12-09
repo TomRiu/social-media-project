@@ -13,25 +13,30 @@ const validationSchema = Yup.object({
 });
 
 const Login = () => {
-  const [formValue, setFormValue] = useState();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { auth } = useSelector((store) => store);
   const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
-    dispatch(resetAuthAction());
+    if (auth.error) {
+      dispatch(resetAuthAction());
+    }
   }, [dispatch]);
 
   useEffect(() => {
     if (auth) {
       const message = auth.error?.response?.data?.message || auth.error;
-      if (message !== "invalid token ...")
-      setErrorMessage(message);
+      if (message && message !== "invalid token ...") {
+        setErrorMessage(message);
+      }
     }
-  }, [auth]);
+    if (auth.jwt && auth.user) {
+      navigate("/"); 
+    }
+  }, [auth, navigate]);
 
-  const handleSubmit = (values) => {
+  const handleLogin = (values) => {
     console.log("handle submit", values);
     dispatch(loginUserAction({ data: values }));
   };
@@ -39,7 +44,7 @@ const Login = () => {
   return (
     <>
       <Formik
-        onSubmit={handleSubmit}
+        onSubmit={handleLogin}
         validationSchema={validationSchema}
         initialValues={initialValues}
       >
@@ -91,11 +96,15 @@ const Login = () => {
         </Form>
       </Formik>
       <div className="flex gap-2 items-center justify-center pt-5">
-        <p>If you don't have account ?</p>
-        <Button onClick={() => {
-          dispatch(resetAuthAction());
-          navigate("/register");
-        }}>Register</Button>
+        <p>If you don't have an account?</p>
+        <Button
+          onClick={() => {
+            dispatch(resetAuthAction());
+            navigate("/register");
+          }}
+        >
+          Register
+        </Button>
       </div>
     </>
   );

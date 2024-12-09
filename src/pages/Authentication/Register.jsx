@@ -32,10 +32,25 @@ const validationSchema = Yup.object({
 
 const Register = () => {
   const [gender, setGender] = useState("female");
-  const { auth } = useSelector((store) => store);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { auth } = useSelector((store) => store);
   const [errorMessage, setErrorMessage] = useState("");
+
+  useEffect(() => {
+    if (auth.error) {
+      dispatch(resetAuthAction());
+    }
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (auth) {
+      const message = auth.error?.response?.data?.message || auth.error;
+      if (message && message !== "invalid token ...") {
+        setErrorMessage(message);
+      }
+    }
+  }, [auth]);
 
   const handleSubmit = (values) => {
     values.gender = gender;
@@ -46,18 +61,6 @@ const Register = () => {
   const handleChange = (event) => {
     setGender(event.target.value);
   };
-
-  useEffect(() => {
-    dispatch(resetAuthAction());
-  }, [dispatch]);
-
-  useEffect(() => {
-    if (auth) {
-      const message = auth.error?.response?.data?.message || auth.error;
-      if (message !== "invalid token ...")
-      setErrorMessage(message);
-    }
-  }, [auth]);
 
   return (
     <>
@@ -134,7 +137,7 @@ const Register = () => {
                 row
                 aria-label="gender"
                 name="gender"
-                value={gender} 
+                value={gender}
               >
                 <FormControlLabel
                   value="female"
@@ -169,11 +172,15 @@ const Register = () => {
         </Form>
       </Formik>
       <div className="flex gap-2 items-center justify-center pt-5">
-        <p>If you already have an account ?</p>
-        <Button onClick={() => {
-          dispatch(resetAuthAction());
-          navigate("/login")
-        }}>Login</Button>
+        <p>If you already have an account?</p>
+        <Button
+          onClick={() => {
+            dispatch(resetAuthAction());
+            navigate("/login");
+          }}
+        >
+          Login
+        </Button>
       </div>
     </>
   );

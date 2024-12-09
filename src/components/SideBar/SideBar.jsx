@@ -26,7 +26,6 @@ const SideBar = () => {
     }
   };
   const handleLogout = () => {
-    localStorage.removeItem("jwt");
     dispatch(resetAuthAction());
     navigate("/login");
   };
