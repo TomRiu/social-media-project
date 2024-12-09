@@ -2,10 +2,12 @@ import React from "react";
 import { navigationMenu } from "./SideBarNavigation";
 import { Avatar, Button, Card, Divider, Menu, MenuItem } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { resetAuthAction } from "../../Redux/Auth/auth.action";
 
 const SideBar = () => {
+  const dispatch = useDispatch();
   const { auth } = useSelector((store) => store);
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -20,8 +22,13 @@ const SideBar = () => {
     if (item.title === "Profile") {
       navigate(`/profile/${auth.user?.id}`);
     } else {
-      navigate(item.path)
+      navigate(item.path);
     }
+  };
+  const handleLogout = () => {
+    localStorage.removeItem("jwt");
+    dispatch(resetAuthAction());
+    navigate("/login");
   };
   return (
     <Card className="card h-screen flex flex-col justify-between py-5">
@@ -73,7 +80,14 @@ const SideBar = () => {
                 "aria-labelledby": "basic-button",
               }}
             >
-              <MenuItem onClick={handleClose}>Logout</MenuItem>
+              <MenuItem
+                onClick={() => {
+                  handleClose();
+                  handleLogout();
+                }}
+              >
+                Logout
+              </MenuItem>
             </Menu>
           </div>
         </div>
