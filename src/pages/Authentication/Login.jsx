@@ -3,7 +3,7 @@ import { ErrorMessage, Field, Form, Formik } from "formik";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
-import { loginUserAction } from "../../Redux/Auth/auth.action";
+import { loginUserAction, resetAuthAction } from "../../Redux/Auth/auth.action";
 import { useNavigate } from "react-router-dom";
 
 const initialValues = { email: "", password: "" };
@@ -18,6 +18,10 @@ const Login = () => {
   const navigate = useNavigate();
   const { auth } = useSelector((store) => store);
   const [errorMessage, setErrorMessage] = useState("");
+
+  useEffect(() => {
+    dispatch(resetAuthAction());
+  }, [dispatch]);
 
   useEffect(() => {
     if (auth) {
@@ -88,7 +92,10 @@ const Login = () => {
       </Formik>
       <div className="flex gap-2 items-center justify-center pt-5">
         <p>If you don't have account ?</p>
-        <Button onClick={() => navigate("/register")}>Register</Button>
+        <Button onClick={() => {
+          dispatch(resetAuthAction());
+          navigate("/register");
+        }}>Register</Button>
       </div>
     </>
   );

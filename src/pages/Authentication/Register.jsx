@@ -6,10 +6,10 @@ import {
   TextField,
 } from "@mui/material";
 import { ErrorMessage, Field, Form, Formik } from "formik";
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
-import { registerUserAction } from "../../Redux/Auth/auth.action";
+import { registerUserAction, resetAuthAction } from "../../Redux/Auth/auth.action";
 import { useNavigate } from "react-router-dom";
 
 const initialValues = {
@@ -32,8 +32,10 @@ const validationSchema = Yup.object({
 
 const Register = () => {
   const [gender, setGender] = useState("female");
+  const { auth } = useSelector((store) => store);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleSubmit = (values) => {
     values.gender = gender;
@@ -44,6 +46,18 @@ const Register = () => {
   const handleChange = (event) => {
     setGender(event.target.value);
   };
+
+  useEffect(() => {
+    dispatch(resetAuthAction());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (auth) {
+      const message = auth.error?.response?.data?.message || auth.error;
+      if (message !== "invalid token ...")
+      setErrorMessage(message);
+    }
+  }, [auth]);
 
   return (
     <>
@@ -149,11 +163,17 @@ const Register = () => {
           >
             Register
           </Button>
+          {errorMessage && (
+            <div className="text-red-500 mt-2">{errorMessage}</div>
+          )}
         </Form>
       </Formik>
       <div className="flex gap-2 items-center justify-center pt-5">
         <p>If you already have an account ?</p>
-        <Button onClick={() => navigate("/login")}>Login</Button>
+        <Button onClick={() => {
+          dispatch(resetAuthAction());
+          navigate("/login")
+        }}>Login</Button>
       </div>
     </>
   );
