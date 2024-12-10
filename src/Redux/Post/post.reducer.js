@@ -6,6 +6,7 @@ const initialState = {
     loading: false,
     error: null,
     posts: [],
+    userPosts: [],
     like: null,
     save: null,
     comments: [],
@@ -37,7 +38,6 @@ export const postReducer = (state = initialState, action) => {
             }
 
         case GET_ALL_POST_SUCCESS:
-        case GET_USERS_POST_SUCCESS:
             return {
                 ...state,
                 posts: action.payload,
@@ -46,11 +46,22 @@ export const postReducer = (state = initialState, action) => {
                 error: null
             }
 
+        case GET_USERS_POST_SUCCESS:
+            return {
+                ...state,
+                userPosts: action.payload,
+                loading: false,
+                error: null,
+            };
+
         case LIKE_POST_SUCCESS:
             return {
                 ...state,
                 like: action.payload,
                 posts: state.posts.map((item) => item.id === action.payload.id ? action.payload : item),
+                userPosts: state.userPosts.map((item) =>
+                    item.id === action.payload.id ? action.payload : item
+                ),
                 loading: false,
                 error: null
             }
@@ -60,6 +71,9 @@ export const postReducer = (state = initialState, action) => {
                 ...state,
                 save: action.payload,
                 posts: state.posts.map((item) => item.id === action.payload.id ? action.payload : item),
+                userPosts: state.userPosts.map((item) =>
+                    item.id === action.payload.id ? action.payload : item
+                ),
                 loading: false,
                 error: null
             }

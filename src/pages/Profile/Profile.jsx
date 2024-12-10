@@ -1,9 +1,10 @@
 import { Avatar, Box, Button, Card, Tab, Tabs } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PostCard from "../../components/Post/PostCard";
 import UserReelCard from "../../components/Reels/UserReelCard";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import ProfileModal from "./ProfileModal";
+import { getUsersPostAction } from "../../Redux/Post/post.action";
 
 const tabs = [
   { value: "post", name: "Post" },
@@ -16,15 +17,26 @@ const reels = [1, 1, 1, 1];
 const savedPost = [1, 1, 1, 1];
 const repost = [1, 1, 1, 1];
 const Profile = () => {
+  const dispatch = useDispatch();
   const { auth, post, user } = useSelector((store) => store);
   const [value, setValue] = React.useState("post");
   const [open, setOpen] = useState(false);
   const handleOpenProfileModal = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+  console.log("user", user);
+  console.log("post", post);
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+  useEffect(() => {
+    if (user.profile.data?.id) {
+      dispatch(getUsersPostAction(user.profile.data.id));
+    }
+  }, [user.profile.data, dispatch]);
+
   return (
     <Card className="my-10 w-[70%]">
       <div className="rounded-md">
@@ -58,9 +70,9 @@ const Profile = () => {
             <p>{user.profile.data.user?.email.toLowerCase()}</p>
           </div>
           <div className="flex gap-2 items-center py-3">
-            <span>41 post</span>
-            <span>35 followers</span>
-            <span>5 followings</span>
+            <span>{post.userPosts.length} posts</span>
+            <span>{user.profile.data?.followersCount} followers</span>
+            <span>{user.profile.data?.followingsCount} followings</span>
           </div>
 
           <div>
@@ -82,7 +94,7 @@ const Profile = () => {
           <div className="flex justify-center">
             {value === "post" ? (
               <div className="space-y-5 w-[70%] my-10">
-                {post.posts.map((item) => (
+                {post.userPosts.map((item) => (
                   <div className="border border-slate-100 rounded-md">
                     <PostCard item={item} />
                   </div>
