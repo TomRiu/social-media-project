@@ -40,7 +40,7 @@ public class User {
     
     private List<Integer> followings = new ArrayList<>();
     
-    @ManyToMany
     @JsonIgnore
+    @ManyToMany
     private List<Post> savedPosts = new ArrayList<>();
 }

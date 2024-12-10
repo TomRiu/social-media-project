@@ -3,6 +3,7 @@ package com.tomriu.tom_social_media.service;
 import java.util.List;
 
 import com.tomriu.tom_social_media.exceptions.UserException;
+import com.tomriu.tom_social_media.models.Post;
 import com.tomriu.tom_social_media.models.User;
 
 public interface UserService {
@@ -27,5 +28,5 @@ public interface UserService {
     
     void changeUserPassword(User user, String newPassword);
    
-	
+    Post savePost(Integer userId, Integer postId) throws Exception;
 }

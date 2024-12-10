@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tomriu.tom_social_media.dto.response.UserProfileResponse;
+import com.tomriu.tom_social_media.models.Post;
 import com.tomriu.tom_social_media.models.User;
 import com.tomriu.tom_social_media.repository.UserRepository;
 import com.tomriu.tom_social_media.service.PostService;
@@ -91,4 +93,30 @@ public class UserController {
 	    
 	    return ResponseEntity.ok(profileResponse);
 	}
+	
+	@PostMapping("/users/save/{postId}")
+	public ResponseEntity<?> savedPostHandler(
+			@PathVariable Integer postId, 
+			@RequestHeader("Authorization") String jwt) throws Exception {
+		
+		User reqUser = userService.findUserByJwt(jwt);
+		
+		try {
+			Post savedPost = userService.savePost(reqUser.getId(), postId);
+            return ResponseEntity.ok(savedPost);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+	}
+	
+	 @GetMapping("users/save")
+	 public ResponseEntity<?> getSavedPosts(@RequestHeader("Authorization") String jwt) {
+		 try {
+			 User reqUser = userService.findUserByJwt(jwt);
+	         List<Post> savedPosts = reqUser.getSavedPosts();
+	         return ResponseEntity.ok(savedPosts);
+	     } catch (Exception e) {
+	         return ResponseEntity.badRequest().body(e.getMessage());
+	     }
+	 }
 }

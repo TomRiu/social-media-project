@@ -16,8 +16,6 @@ public interface PostService {
 	
 	List<Post> findAllPost();
 	
-	Post savePost(Integer postId, Integer userId) throws Exception;
-	
 	Post likePost(Integer postId, Integer userId) throws Exception;
 	
 	

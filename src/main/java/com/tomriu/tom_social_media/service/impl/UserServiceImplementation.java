@@ -15,6 +15,7 @@ import com.tomriu.tom_social_media.models.User;
 import com.tomriu.tom_social_media.repository.PasswordResetTokenRepository;
 import com.tomriu.tom_social_media.repository.PostRepository;
 import com.tomriu.tom_social_media.repository.UserRepository;
+import com.tomriu.tom_social_media.service.PostService;
 import com.tomriu.tom_social_media.service.UserService;
 
 import lombok.RequiredArgsConstructor;
@@ -142,6 +143,32 @@ public class UserServiceImplementation implements UserService {
     public void changeUserPassword(User user, String newPassword) {
         user.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(user);
+    }
+
+	@Override
+	public Post savePost(Integer userId, Integer postId) throws Exception {
+	     
+	     User user = findUserById(userId);
+	     Optional<Post> postOtp = postRepository.findById(postId);
+	     
+	     if (!postOtp.isPresent()) {
+	    	 throw new Exception("post not found with id " + postId);
+	     }
+	     Post post = postOtp.get();
+	     
+	     if (user.getSavedPosts().contains(post)) {
+	    	 user.getSavedPosts().remove(post);
+	     } else {
+	    	 user.getSavedPosts().add(post);
+	     }
+	     
+	     userRepository.save(user);
+	     return post;
+	}
+	
+	public List<Post> getSavedPosts(Integer userId) throws Exception {
+
+        return findUserById(userId).getSavedPosts();
     }
 
 }
