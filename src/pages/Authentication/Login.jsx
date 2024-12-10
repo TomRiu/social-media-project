@@ -15,7 +15,8 @@ const validationSchema = Yup.object({
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { auth } = useSelector((store) => store);
+  const auth = useSelector(store => store.auth);
+  const user = useSelector(store => store.user);
   const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
@@ -31,10 +32,10 @@ const Login = () => {
         setErrorMessage(message);
       }
     }
-    if (auth.jwt && auth.user) {
+    if (auth.jwt && user.profile.data) {
       navigate("/"); 
     }
-  }, [auth, navigate]);
+  }, [auth, user, navigate]);
 
   const handleLogin = (values) => {
     console.log("handle submit", values);

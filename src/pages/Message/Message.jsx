@@ -23,7 +23,7 @@ import Stom from "stompjs";
 
 const Message = () => {
   const dispatch = useDispatch();
-  const { message, auth } = useSelector((store) => store);
+  const { message, auth, user } = useSelector((store) => store);
   const [currentChat, setCurrentChat] = useState();
   const [messages, setMessages] = useState([]);
   const [selectedImage, setSelectedImage] = useState();
@@ -38,7 +38,7 @@ const Message = () => {
   useEffect(() => {
     if (currentChat) {
       setPartner(
-        auth.user?.id === currentChat.users[0]?.id
+        user.profile.data?.id === currentChat.users[0]?.id
           ? currentChat.users[1]
           : currentChat.users[0]
       );
@@ -83,7 +83,7 @@ const Message = () => {
   };
 
   useEffect(() => {
-    if (stompClient && auth.user && currentChat) {
+    if (stompClient && user.profile.data && currentChat) {
       const subscription = stompClient.subscribe(
         `/user/${currentChat.id}/private`,
         onMessageReceive

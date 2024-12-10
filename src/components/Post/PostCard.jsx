@@ -24,7 +24,7 @@ import { isLikedByReqUser } from "../../utils/isLikedByReqUser";
 
 const PostCard = ({ item }) => {
   const dispatch = useDispatch();
-  const { post, auth } = useSelector((store) => store);
+  const { post, auth, user } = useSelector((store) => store);
   const [showComments, setShowComments] = useState(false);
 
   const handleShowComments = () => {
@@ -87,7 +87,7 @@ const PostCard = ({ item }) => {
       <CardActions className="flex justify-between" disableSpacing>
         <div className="flex items-center">
           <IconButton onClick={handleLikePost}>
-            {isLikedByReqUser(auth.user.id, item) ? (
+            {isLikedByReqUser(user.profile.data.id, item) ? (
               <FavoriteIcon />
             ) : (
               <FavoriteBorderIcon />

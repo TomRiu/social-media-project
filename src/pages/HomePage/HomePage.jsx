@@ -1,21 +1,18 @@
+// src/pages/HomePage/HomePage.jsx
 import { Grid } from "@mui/material";
-import React, { useEffect } from "react";
+import React from "react";
 import SideBar from "../../components/SideBar/SideBar";
-import { Route, Routes, useLocation } from "react-router-dom";
 import MiddlePart from "../../components/MiddlePart/MiddlePart";
 import Reels from "../../components/Reels/Reels";
 import CreateReelsForm from "../../components/Reels/CreateReelsForm";
 import Profile from "../Profile/Profile";
 import HomeRight from "../../components/HomeRight/HomeRight";
-import { useDispatch, useSelector } from "react-redux";
+import { Outlet, useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const HomePage = () => {
-  const dispatch = useDispatch();
   const location = useLocation();
-  const jwt = localStorage.getItem("jwt");
-  const { auth } = useSelector((store) => store);
-
-  console.log("auth ", auth);
+  const auth = useSelector((store) => store.auth);
 
   return (
     <div className="px-20">
@@ -26,17 +23,12 @@ const HomePage = () => {
           </div>
         </Grid>
         <Grid
-          lg={location.pathname === "/" ? 6 : 9}
+          lg={location.pathname.startsWith("/profile") ? 9 : 6} // Adjust grid size based on route
           item
           className="px-5 flex justify-center"
           xs={12}
         >
-          <Routes>
-            <Route path="/" element={<MiddlePart />} />
-            <Route path="/reels" element={<Reels />} />
-            <Route path="/create-reels" element={<CreateReelsForm />} />
-            <Route path="/profile/:id" element={<Profile />} />
-          </Routes>
+          <Outlet /> {location.pathname === "/" && <MiddlePart />}
         </Grid>
 
         {location.pathname === "/" && (

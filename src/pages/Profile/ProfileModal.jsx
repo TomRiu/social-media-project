@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useFormik } from "formik";
 import { Avatar, IconButton, TextField } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import { updateProfileAction } from "../../Redux/Auth/auth.action";
+import { updateProfileAction } from "../../Redux/User/user.action";
 
 const style = {
   position: "absolute",
@@ -25,15 +25,16 @@ const style = {
 
 export default function ProfileModal({ open, handleClose }) {
   const dispatch = useDispatch();
-  const { auth, post } = useSelector((store) => store);
+  const { auth, post, user } = useSelector((store) => store);
+  console.log("user Profile Modal", user);
 
   const handleSubmit = (values) => {
     console.log("values ", values);
   };
   const formik = useFormik({
     initialValues: {
-      firstName: auth.user.firstName,
-      lastName: auth.user.lastName
+      firstName: user.profile.data.firstName,
+      lastName: user.profile.data.lastName
     },
     onSubmit: (values) => {
       console.log("values ", values);

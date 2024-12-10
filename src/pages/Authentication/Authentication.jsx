@@ -3,7 +3,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 
 const Authentication = ({ children }) => {
-  const { auth } = useSelector((store) => store);
+  const auth = useSelector(store => store.auth);
 
   return (
     <div>

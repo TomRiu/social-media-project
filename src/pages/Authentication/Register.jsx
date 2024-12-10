@@ -34,7 +34,7 @@ const Register = () => {
   const [gender, setGender] = useState("female");
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { auth } = useSelector((store) => store);
+  const auth = useSelector(store => store.auth);
   const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {

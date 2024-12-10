@@ -16,7 +16,7 @@ const reels = [1, 1, 1, 1];
 const savedPost = [1, 1, 1, 1];
 const repost = [1, 1, 1, 1];
 const Profile = () => {
-  const { auth, post } = useSelector((store) => store);
+  const { auth, post, user } = useSelector((store) => store);
   const [value, setValue] = React.useState("post");
   const [open, setOpen] = useState(false);
   const handleOpenProfileModal = () => setOpen(true);
@@ -54,8 +54,8 @@ const Profile = () => {
         </div>
         <div className="p-5">
           <div>
-            <h1 className="py-1 font-bold text-xl">{auth.user?.firstName + " " + auth.user?.lastName}</h1>
-            <p>{auth.user?.email.toLowerCase()}</p>
+            <h1 className="py-1 font-bold text-xl">{user.profile.data?.firstName + " " + user.profile.data?.lastName}</h1>
+            <p>{user.profile.data.user?.email.toLowerCase()}</p>
           </div>
           <div className="flex gap-2 items-center py-3">
             <span>41 post</span>

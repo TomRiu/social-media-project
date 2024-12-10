@@ -4,10 +4,11 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { useSelector } from "react-redux";
 
 const UserChatCard = ({ chat }) => {
-  const { auth } = useSelector((store) => store);
+  const auth = useSelector(store => store.auth);
+  const thisUser = useSelector(store => store.user);
   
   const users = chat.users;
-  const user = auth.user?.id === users[0]?.id ? users[1] : users[0];
+  const user = thisUser.profile.data?.id === users[0]?.id ? users[1] : users[0];
   
   return (
     <Card>
