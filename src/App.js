@@ -9,6 +9,8 @@ import { getProfileAction } from './Redux/Auth/auth.action';
 import ProtectedRoute from './components/ProtectedRoute';
 import Login from './pages/Authentication/Login';
 import Register from './pages/Authentication/Register';
+import ForgotPassword from './components/ForgotPassword';
+import ResetPassword from './components/ResetPassword';
 
 function App() {
   const { auth } = useSelector(store => store);
@@ -27,6 +29,8 @@ function App() {
         {/* Public Routes */}
         <Route path="/login" element={<Authentication><Login /></Authentication>} />
         <Route path="/register" element={<Authentication><Register /></Authentication>} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
 
         {/* Protected Routes */}
         <Route
