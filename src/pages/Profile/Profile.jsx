@@ -5,6 +5,11 @@ import UserReelCard from "../../components/Reels/UserReelCard";
 import { useDispatch, useSelector } from "react-redux";
 import ProfileModal from "./ProfileModal";
 import { getUsersPostAction } from "../../Redux/Post/post.action";
+import {
+  fetchUserProfileAction,
+  getSavedPostsAction,
+} from "../../Redux/User/user.action";
+import { useParams } from "react-router-dom";
 
 const tabs = [
   { value: "post", name: "Post" },
@@ -12,29 +17,27 @@ const tabs = [
   { value: "saved", name: "Saved" },
   { value: "repost", name: "Repost" },
 ];
-const posts = [1, 1, 1, 1];
 const reels = [1, 1, 1, 1];
-const savedPost = [1, 1, 1, 1];
 const repost = [1, 1, 1, 1];
 const Profile = () => {
   const dispatch = useDispatch();
+  const { id } = useParams();
   const { auth, post, user } = useSelector((store) => store);
   const [value, setValue] = React.useState("post");
   const [open, setOpen] = useState(false);
   const handleOpenProfileModal = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
-  console.log("user", user);
-  console.log("post", post);
+  const savedPost = user.savedPosts.data;
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
   useEffect(() => {
-    if (user.profile.data?.id) {
-      dispatch(getUsersPostAction(user.profile.data.id));
+    if (id) {
+      dispatch(getUsersPostAction(id));
     }
+    dispatch(getSavedPostsAction());
   }, [user.profile.data, dispatch]);
 
   return (
@@ -55,7 +58,11 @@ const Profile = () => {
           />
 
           {true ? (
-            <Button onClick={handleOpenProfileModal} sx={{ borderRadius: "20px" }} variant="outlined">
+            <Button
+              onClick={handleOpenProfileModal}
+              sx={{ borderRadius: "20px" }}
+              variant="outlined"
+            >
               Edit Profile
             </Button>
           ) : (
@@ -66,7 +73,9 @@ const Profile = () => {
         </div>
         <div className="p-5">
           <div>
-            <h1 className="py-1 font-bold text-xl">{user.profile.data?.firstName + " " + user.profile.data?.lastName}</h1>
+            <h1 className="py-1 font-bold text-xl">
+              {user.profile.data?.firstName + " " + user.profile.data?.lastName}
+            </h1>
             <p>{user.profile.data.user?.email.toLowerCase()}</p>
           </div>
           <div className="flex gap-2 items-center py-3">
@@ -110,11 +119,18 @@ const Profile = () => {
               </div>
             ) : value === "saved" ? (
               <div className="space-y-5 w-[70%] my-10">
-                {savedPost.map((item) => (
-                  <div className="border border-slate-100 rounded-md">
-                    <PostCard />
-                  </div>
-                ))}
+                {savedPost.length > 0 ? (
+                  savedPost.map((post) => (
+                    <div
+                      className="border border-slate-100 rounded-md"
+                      key={post.id}
+                    >
+                      <PostCard item={post} />
+                    </div>
+                  ))
+                ) : (
+                  <p>No saved posts.</p>
+                )}
               </div>
             ) : value === "repost" ? (
               <div className="space-y-5 w-[70%] my-10">

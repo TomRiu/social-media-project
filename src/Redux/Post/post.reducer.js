@@ -1,5 +1,5 @@
 import { CREATE_COMMENT_FAILURE, CREATE_COMMENT_REQUEST, CREATE_COMMENT_SUCCESS, LIKE_COMMENT_FAILURE, LIKE_COMMENT_REQUEST, LIKE_COMMENT_SUCCESS } from "../Comment/comment.actionType"
-import { CREATE_POST_FAILURE, CREATE_POST_REQUEST, CREATE_POST_SUCCESS, GET_ALL_POST_FAILURE, GET_ALL_POST_REQUEST, GET_ALL_POST_SUCCESS, GET_USERS_POST_FAILURE, GET_USERS_POST_REQUEST, GET_USERS_POST_SUCCESS, LIKE_POST_FAILURE, LIKE_POST_REQUEST, LIKE_POST_SUCCESS, SAVE_POST_FAILURE, SAVE_POST_REQUEST, SAVE_POST_SUCCESS } from "./post.actionType"
+import { CREATE_POST_FAILURE, CREATE_POST_REQUEST, CREATE_POST_SUCCESS, GET_ALL_POST_FAILURE, GET_ALL_POST_REQUEST, GET_ALL_POST_SUCCESS, GET_USERS_POST_FAILURE, GET_USERS_POST_REQUEST, GET_USERS_POST_SUCCESS, LIKE_POST_FAILURE, LIKE_POST_REQUEST, LIKE_POST_SUCCESS, REPOST_FAILURE, REPOST_REQUEST, REPOST_SUCCESS } from "./post.actionType"
 
 const initialState = {
     post: null,
@@ -8,9 +8,9 @@ const initialState = {
     posts: [],
     userPosts: [],
     like: null,
-    save: null,
     comments: [],
-    newComment: null
+    newComment: null,
+    success: false,
 }
 
 export const postReducer = (state = initialState, action) => {
@@ -19,9 +19,9 @@ export const postReducer = (state = initialState, action) => {
         case GET_ALL_POST_REQUEST:
         case GET_USERS_POST_REQUEST:
         case LIKE_POST_REQUEST:
-        case SAVE_POST_REQUEST:
         case CREATE_COMMENT_REQUEST:
         case LIKE_COMMENT_REQUEST:
+        case REPOST_REQUEST:
             return {
                 ...state,
                 error: null,
@@ -66,18 +66,6 @@ export const postReducer = (state = initialState, action) => {
                 error: null
             }
 
-        case SAVE_POST_SUCCESS:
-            return {
-                ...state,
-                save: action.payload,
-                posts: state.posts.map((item) => item.id === action.payload.id ? action.payload : item),
-                userPosts: state.userPosts.map((item) =>
-                    item.id === action.payload.id ? action.payload : item
-                ),
-                loading: false,
-                error: null
-            }
-
         case CREATE_COMMENT_SUCCESS:
             return {
                 ...state,
@@ -91,13 +79,22 @@ export const postReducer = (state = initialState, action) => {
 
             }
 
+        case REPOST_SUCCESS:
+            return {
+                ...state,
+                loading: false,
+                posts: [action.payload, ...state.posts],
+                error: null,
+                success: true,
+            };
+
         case CREATE_POST_FAILURE:
         case GET_ALL_POST_FAILURE:
         case GET_USERS_POST_FAILURE:
         case LIKE_POST_FAILURE:
-        case SAVE_POST_FAILURE:
         case CREATE_COMMENT_FAILURE:
         case LIKE_COMMENT_FAILURE:
+        case REPOST_FAILURE:
             return {
                 ...state,
                 error: action.payload,

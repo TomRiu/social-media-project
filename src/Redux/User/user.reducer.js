@@ -13,12 +13,23 @@ import {
     FETCH_USER_PROFILE_REQUEST,
     FETCH_USER_PROFILE_SUCCESS,
     FETCH_USER_PROFILE_FAILURE,
+    SAVE_POST_REQUEST,
+    SAVE_POST_SUCCESS,
+    SAVE_POST_FAILURE,
+    FETCH_SAVED_POSTS_REQUEST,
+    FETCH_SAVED_POSTS_SUCCESS,
+    FETCH_SAVED_POSTS_FAILURE,
 } from './user.types';
 
 const initialState = {
     profile: {
         loading: false,
         data: null,
+        error: null,
+    },
+    savedPosts: {
+        loading: false,
+        data: [],
         error: null,
     },
     search: {
@@ -144,6 +155,69 @@ export const userReducer = (state = initialState, action) => {
                     data: null,
                     error: action.payload,
                 }
+            };
+
+        case SAVE_POST_REQUEST:
+            return {
+                ...state,
+                savedPosts: {
+                    ...state.savedPosts,
+                    loading: true,
+                    error: null,
+                },
+            };
+        case SAVE_POST_SUCCESS:
+            const updatedPost = action.payload; // The saved/unsaved post
+            const isAlreadySaved = state.savedPosts.data?.some(post => post.id === updatedPost.id);
+
+            return {
+                ...state,
+                savedPosts: {
+                    ...state.savedPosts,
+                    loading: false,
+                    data: isAlreadySaved
+                        ? state.savedPosts.data.filter(post => post.id !== updatedPost.id)
+                        : [...(state.savedPosts.data || []), updatedPost], 
+                    error: null,
+                },
+            };
+        case SAVE_POST_FAILURE:
+            return {
+                ...state,
+                savedPosts: {
+                    ...state.savedPosts,
+                    loading: false,
+                    error: action.payload,
+                },
+            };
+
+        case FETCH_SAVED_POSTS_REQUEST:
+            return {
+                ...state,
+                savedPosts: {
+                    ...state.savedPosts,
+                    loading: true,
+                    error: null,
+                },
+            };
+        case FETCH_SAVED_POSTS_SUCCESS:
+            return {
+                ...state,
+                savedPosts: {
+                    ...state.savedPosts,
+                    loading: false,
+                    data: action.payload,
+                    error: null,
+                },
+            };
+        case FETCH_SAVED_POSTS_FAILURE:
+            return {
+                ...state,
+                savedPosts: {
+                    ...state.savedPosts,
+                    loading: false,
+                    error: action.payload,
+                },
             };
 
         // Default

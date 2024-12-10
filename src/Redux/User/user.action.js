@@ -14,6 +14,12 @@ import {
   FETCH_USER_PROFILE_REQUEST,
   FETCH_USER_PROFILE_SUCCESS,
   FETCH_USER_PROFILE_FAILURE,
+  SAVE_POST_REQUEST,
+  SAVE_POST_SUCCESS,
+  SAVE_POST_FAILURE,
+  FETCH_SAVED_POSTS_REQUEST,
+  FETCH_SAVED_POSTS_SUCCESS,
+  FETCH_SAVED_POSTS_FAILURE,
 } from './user.types';
 import { api, API_BASE_URL } from '../../config/api';
 
@@ -88,6 +94,32 @@ export const searchUser = (query) => async (dispatch) => {
   } catch (error) {
     console.log('-----', error);
     dispatch({ type: SEARCH_USER_FAILURE, payload: error.message });
+  }
+};
+
+export const savePostAction = (postId) => async (dispatch) => {
+  dispatch({ type: SAVE_POST_REQUEST })
+  try {
+      const { data } = await api.post(`/api/users/save/${postId}`)
+      dispatch({ type: SAVE_POST_SUCCESS, payload: data })
+      console.log("handle save or unsave post ", data)
+  } catch (error) {
+      console.log("error ", error)
+      dispatch({ type: SAVE_POST_FAILURE, payload: error })
+  }
+}
+
+export const getSavedPostsAction = () => async (dispatch) => {
+  dispatch({ type: FETCH_SAVED_POSTS_REQUEST });
+  try {
+    const { data } = await api.get(`/api/users/save`);
+
+    dispatch({ type: FETCH_SAVED_POSTS_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: FETCH_SAVED_POSTS_FAILURE,
+      payload: error.response?.data || 'Failed to fetch saved posts',
+    });
   }
 };
 

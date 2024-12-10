@@ -14,18 +14,22 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import ShareIcon from "@mui/icons-material/Share";
 import ChatBubbleIcon from "@mui/icons-material/ChatBubble";
+import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createCommentAction } from "../../Redux/Comment/comment.action";
-import { likePostAction } from "../../Redux/Post/post.action";
 import { isLikedByReqUser } from "../../utils/isLikedByReqUser";
+import { isSavedByReqUser } from "../../utils/isSavedByReqUser";
+import { likePostAction } from "../../Redux/Post/post.action";
+import { getSavedPostsAction, savePostAction } from "../../Redux/User/user.action";
 
 const PostCard = ({ item }) => {
   const dispatch = useDispatch();
   const { post, auth, user } = useSelector((store) => store);
   const [showComments, setShowComments] = useState(false);
+  const isSaved = user.savedPosts.data?.some(i => i.id === item.id) || false;
 
   const handleShowComments = () => {
     setShowComments(!showComments);
@@ -43,6 +47,10 @@ const PostCard = ({ item }) => {
 
   const handleLikePost = () => {
     dispatch(likePostAction(item.id));
+  };
+
+  const handleSavePost = () => {
+    dispatch(savePostAction(item.id));
   };
 
   return (
@@ -93,16 +101,24 @@ const PostCard = ({ item }) => {
               <FavoriteBorderIcon />
             )}
           </IconButton>
-          <IconButton>
+          {/* <IconButton>
             <ShareIcon />
-          </IconButton>
+          </IconButton> */}
           <IconButton onClick={handleShowComments}>
-            <ChatBubbleIcon />
+            {showComments ? (
+              <ChatBubbleIcon />
+            ) : (
+              <ChatBubbleOutlineIcon />
+            )}
           </IconButton>
         </div>
         <div>
-          <IconButton>
-            {true ? <BookmarkIcon /> : <BookmarkBorderIcon />}
+          <IconButton onClick={handleSavePost}>
+            {isSaved ? (
+              <BookmarkIcon />
+            ) : (
+              <BookmarkBorderIcon />
+            )}
           </IconButton>
         </div>
       </CardActions>

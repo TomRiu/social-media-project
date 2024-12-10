@@ -1,5 +1,5 @@
 import { api } from "../../config/api"
-import { CREATE_POST_FAILURE, CREATE_POST_REQUEST, CREATE_POST_SUCCESS, GET_ALL_POST_FAILURE, GET_ALL_POST_REQUEST, GET_ALL_POST_SUCCESS, GET_USERS_POST_FAILURE, GET_USERS_POST_REQUEST, GET_USERS_POST_SUCCESS, LIKE_POST_FAILURE, LIKE_POST_REQUEST, LIKE_POST_SUCCESS, SAVE_POST_FAILURE, SAVE_POST_REQUEST, SAVE_POST_SUCCESS } from "./post.actionType"
+import { CREATE_POST_FAILURE, CREATE_POST_REQUEST, CREATE_POST_SUCCESS, GET_ALL_POST_FAILURE, GET_ALL_POST_REQUEST, GET_ALL_POST_SUCCESS, GET_USERS_POST_FAILURE, GET_USERS_POST_REQUEST, GET_USERS_POST_SUCCESS, LIKE_POST_FAILURE, LIKE_POST_REQUEST, LIKE_POST_SUCCESS, REPOST_FAILURE, REPOST_REQUEST, REPOST_SUCCESS, SAVE_POST_FAILURE, SAVE_POST_REQUEST, SAVE_POST_SUCCESS } from "./post.actionType"
 
 export const createPostAction = (postData) => async (dispatch) => {
     dispatch({ type: CREATE_POST_REQUEST })
@@ -49,14 +49,15 @@ export const likePostAction = (postId) => async (dispatch) => {
     }
 }
 
-export const savePostAction = (postId) => async (dispatch) => {
-    dispatch({ type: SAVE_POST_REQUEST })
+export const repostPostAction = (postId) => async (dispatch) => {
+    dispatch({ type: REPOST_REQUEST });
     try {
-        const { data } = await api.put(`/api/posts/save/${postId}`)
-        dispatch({ type: SAVE_POST_SUCCESS, payload: data })
-        console.log("save post ", data)
+      const { data } = await api.post(`/api/posts/repost/${postId}`);
+      dispatch({ type: REPOST_SUCCESS, payload: data });
     } catch (error) {
-        console.log("error ", error)
-        dispatch({ type: SAVE_POST_FAILURE, payload: error })
+      dispatch({
+        type: REPOST_FAILURE,
+        payload: error.response?.data?.message || "Failed to repost.",
+      });
     }
-}
+  };

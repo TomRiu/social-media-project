@@ -9,6 +9,7 @@ import PostCard from "../Post/PostCard";
 import CreatePostModal from "../CreatePost/CreatePostModal";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllPostAction } from "../../Redux/Post/post.action";
+import { getSavedPostsAction } from "../../Redux/User/user.action";
 
 const story = [1, 1, 1, 1];
 // const posts = [1, 1, 1, 1];
@@ -22,7 +23,8 @@ const MiddlePart = () => {
   useEffect(() => {
     console.log("post data", post);
     dispatch(getAllPostAction());
-  }, [post.newComment]);
+    dispatch(getSavedPostsAction());
+  }, [post.newComment, dispatch]);
 
   return (
     <div className="px-20">
