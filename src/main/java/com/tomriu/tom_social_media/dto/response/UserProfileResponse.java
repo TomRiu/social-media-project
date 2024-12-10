@@ -1,9 +1,5 @@
 package com.tomriu.tom_social_media.dto.response;
 
-import java.util.List;
-
-import com.tomriu.tom_social_media.models.Post;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,6 +15,6 @@ public class UserProfileResponse {
     private String gender;
     private Integer followersCount;
     private Integer followingsCount;
-    private List<Post> posts;
+    private Integer postsCount;
     
 }

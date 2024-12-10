@@ -76,15 +76,6 @@ public class UserController {
 	}
 	
 	@GetMapping("/users/profile")
-	public User getUserFromToken(@RequestHeader("Authorization") String jwt) {
-		User user = userService.findUserByJwt(jwt);
-		
-		user.setPassword(null);
-		
-		return user;
-	}
-	
-	@GetMapping("/profile")
 	public ResponseEntity<?> getUserProfile(Authentication authentication) {
 	    User currentUser = userService.findUserByEmail(authentication.getName());
 	    UserProfileResponse profileResponse = new UserProfileResponse();
@@ -96,7 +87,7 @@ public class UserController {
 	    profileResponse.setGender(currentUser.getGender());
 	    profileResponse.setFollowersCount(currentUser.getFollowers().size());
 	    profileResponse.setFollowingsCount(currentUser.getFollowings().size());
-	    profileResponse.setPosts(postService.findPostByUserId(currentUser.getId()));
+	    profileResponse.setPostsCount(postService.findPostByUserId(currentUser.getId()).size());
 	    
 	    return ResponseEntity.ok(profileResponse);
 	}
