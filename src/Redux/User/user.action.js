@@ -27,16 +27,12 @@ import { api, API_BASE_URL } from '../../config/api';
 export const fetchUserProfileAction = (id) => async (dispatch) => {
   dispatch({ type: FETCH_USER_PROFILE_REQUEST });
   try {
-    const response = await axios.get(`/api/users/${id}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('jwt')}`,
-      },
-    });
+    const response = await api.get(`/api/users/${id}`);
     dispatch({
       type: FETCH_USER_PROFILE_SUCCESS,
       payload: response.data,
     });
-    console.log('user profile ---', response.data);
+    console.log('other user profile ---', response.data);
   } catch (error) {
     dispatch({
       type: FETCH_USER_PROFILE_FAILURE,
@@ -55,7 +51,7 @@ export const getProfileAction = (jwt) => async (dispatch) => {
     });
 
     dispatch({ type: GET_PROFILE_SUCCESS, payload: data });
-    console.log('profile ---', data);
+    console.log('my profile ---', data);
   } catch (error) {
     console.log('-----', error);
     dispatch({ type: GET_PROFILE_FAILURE, payload: error.message });

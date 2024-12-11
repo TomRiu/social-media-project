@@ -26,7 +26,6 @@ const style = {
 export default function ProfileModal({ open, handleClose }) {
   const dispatch = useDispatch();
   const { auth, post, user } = useSelector((store) => store);
-  console.log("user Profile Modal", user);
 
   const handleSubmit = (values) => {
     console.log("values ", values);

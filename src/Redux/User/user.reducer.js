@@ -27,6 +27,11 @@ const initialState = {
         data: null,
         error: null,
     },
+    otherProfile: {
+        loading: false,
+        data: null,
+        error: null,
+    },
     savedPosts: {
         loading: false,
         data: [],
@@ -132,7 +137,7 @@ export const userReducer = (state = initialState, action) => {
         case FETCH_USER_PROFILE_REQUEST:
             return {
                 ...state,
-                profile: {
+                otherProfile: {
                     ...state.profile,
                     loading: true,
                     error: null,
@@ -141,7 +146,7 @@ export const userReducer = (state = initialState, action) => {
         case FETCH_USER_PROFILE_SUCCESS:
             return {
                 ...state,
-                profile: {
+                otherProfile: {
                     loading: false,
                     data: action.payload,
                     error: null,
@@ -150,7 +155,7 @@ export const userReducer = (state = initialState, action) => {
         case FETCH_USER_PROFILE_FAILURE:
             return {
                 ...state,
-                profile: {
+                otherProfile: {
                     loading: false,
                     data: null,
                     error: action.payload,
