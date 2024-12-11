@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tomriu.tom_social_media.dto.response.FollowUserResponse;
+import com.tomriu.tom_social_media.dto.response.UnFollowUserResponse;
 import com.tomriu.tom_social_media.dto.response.UserProfileResponse;
 import com.tomriu.tom_social_media.models.Post;
 import com.tomriu.tom_social_media.models.User;
@@ -46,10 +48,20 @@ public class UserController {
 	}
 	
 	@GetMapping("/users/{userId}")
-	public User getUserById(@PathVariable Integer userId) throws Exception {
-		
-		User user = userService.findUserById(userId);
-		return user;
+	public ResponseEntity<?> getUserById(@PathVariable Integer userId) throws Exception {
+	    User currentUser = userService.findUserById(userId);
+	    UserProfileResponse profileResponse = new UserProfileResponse();
+	    
+	    profileResponse.setId(currentUser.getId());
+	    profileResponse.setFirstName(currentUser.getFirstName());
+	    profileResponse.setLastName(currentUser.getLastName());
+	    profileResponse.setEmail(currentUser.getEmail());
+	    profileResponse.setGender(currentUser.getGender());
+	    profileResponse.setFollowers(currentUser.getFollowers());
+	    profileResponse.setFollowings(currentUser.getFollowings());
+	    profileResponse.setPostsCount(postService.findPostByUserId(currentUser.getId()).size());
+	    
+	    return ResponseEntity.ok(profileResponse);
 	}
 	
 	@PutMapping("/users")
@@ -61,13 +73,24 @@ public class UserController {
 		return updatedUser;
 	}
 	
-	@PutMapping("/users/follow/{userId2}")
-	public User followUserHandler(@RequestHeader("Authorization") String jwt, @PathVariable Integer userId2) throws Exception {
+	@PostMapping("/users/follow/{userId2}")
+	public ResponseEntity<?> followUserHandler(@RequestHeader("Authorization") String jwt, @PathVariable Integer userId2) throws Exception {
 		
 		User reqUser = userService.findUserByJwt(jwt);
 		
-		User user = userService.followUser(reqUser.getId(), userId2);
-		return user;
+		userService.followUser(reqUser.getId(), userId2);
+		
+		return ResponseEntity.ok(new FollowUserResponse(reqUser.getId(), userId2));
+	}
+	
+	@PostMapping("/users/unfollow/{userId2}")
+	public ResponseEntity<?> unfollowUserHandler(@RequestHeader("Authorization") String jwt, @PathVariable Integer userId2) throws Exception {
+		
+		User reqUser = userService.findUserByJwt(jwt);
+		
+		userService.unfollowUser(reqUser.getId(), userId2);
+		
+	    return ResponseEntity.ok(new UnFollowUserResponse(reqUser.getId(), userId2));
 	}
 	
 	@GetMapping("/users/search")
@@ -87,8 +110,8 @@ public class UserController {
 	    profileResponse.setLastName(currentUser.getLastName());
 	    profileResponse.setEmail(currentUser.getEmail());
 	    profileResponse.setGender(currentUser.getGender());
-	    profileResponse.setFollowersCount(currentUser.getFollowers().size());
-	    profileResponse.setFollowingsCount(currentUser.getFollowings().size());
+	    profileResponse.setFollowers(currentUser.getFollowers());
+	    profileResponse.setFollowings(currentUser.getFollowings());
 	    profileResponse.setPostsCount(postService.findPostByUserId(currentUser.getId()).size());
 	    
 	    return ResponseEntity.ok(profileResponse);
@@ -109,10 +132,10 @@ public class UserController {
         }
 	}
 	
-	 @GetMapping("users/save")
-	 public ResponseEntity<?> getSavedPosts(@RequestHeader("Authorization") String jwt) {
+	 @GetMapping("users/save/{userId}")
+	 public ResponseEntity<?> getSavedPosts(@PathVariable Integer userId) {
 		 try {
-			 User reqUser = userService.findUserByJwt(jwt);
+			 User reqUser = userService.findUserById(userId);
 	         List<Post> savedPosts = reqUser.getSavedPosts();
 	         return ResponseEntity.ok(savedPosts);
 	     } catch (Exception e) {

@@ -16,6 +16,8 @@ public interface UserService {
 	
 	public User followUser(Integer userId1, Integer userId2) throws UserException;
 	
+	User unfollowUser(Integer reqUserId, Integer userId2) throws UserException;
+	
 	public User updateUser(User user, Integer userId) throws UserException;
 	
 	public List<User> searchUser(String query);

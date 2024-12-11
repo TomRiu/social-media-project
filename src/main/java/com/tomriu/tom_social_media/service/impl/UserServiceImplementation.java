@@ -77,6 +77,22 @@ public class UserServiceImplementation implements UserService {
 		
 		return reqUser;
 	}
+	
+	@Override
+	public User unfollowUser(Integer reqUserId, Integer userId2) throws UserException {
+		
+		User reqUser = findUserById(reqUserId);
+		
+		User user2 = findUserById(userId2);
+		
+		user2.getFollowers().remove(reqUser.getId());
+		reqUser.getFollowings().remove(user2.getId());
+		
+		userRepository.save(reqUser);
+		userRepository.save(user2);
+		
+		return reqUser;
+	}
 
 	@Override
 	public User updateUser(User user, Integer userId) throws UserException {
