@@ -6,9 +6,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { getUsersPostAction } from "../../Redux/Post/post.action";
 import {
   fetchUserProfileAction,
+  getProfileAction,
   getSavedPostsAction,
-  // followUserAction,
-  // unfollowUserAction,
+  followUserAction,
+  unfollowUserAction,
 } from "../../Redux/User/user.action";
 import { useParams } from "react-router-dom";
 import PostCard from "../../components/Post/PostCard";
@@ -25,14 +26,13 @@ const tabs = [
 const Profile = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
-  const { auth, post, user } = useSelector((store) => store);
-  
-  // Determine if the viewed profile is the current user's profile
+  const { post, user } = useSelector((store) => store);
+
   const isOwnProfile = id === user.profile.data?.id.toString();
 
   const [value, setValue] = useState("post");
   const [open, setOpen] = useState(false);
-  const [isFollowing, setIsFollowing] = useState(false); // Track follow status
+  const [isFollowing, setIsFollowing] = useState(false); 
 
   const handleOpenProfileModal = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -47,24 +47,32 @@ const Profile = () => {
     if (id) {
       dispatch(fetchUserProfileAction(id));
       dispatch(getUsersPostAction(id));
-      dispatch(getSavedPostsAction());
+      dispatch(getSavedPostsAction(id));
     }
   }, [id, dispatch]);
 
   useEffect(() => {
-    if (!isOwnProfile && user.otherProfile.data && user.otherProfile.data.followings) {
-      // Check if the current user is following the viewed user
-      setIsFollowing(user.profile.data.followings.some((following) => following.id === parseInt(id)));
+    if (
+      !isOwnProfile &&
+      user.otherProfile.data &&
+      user.otherProfile.data.followings
+    ) {
+
+      setIsFollowing(
+        user.otherProfile.data.followers.some(
+          (id) => id === parseInt(id)
+        )
+      );
     }
   }, [isOwnProfile, user.otherProfile.data, id]);
 
   const handleFollow = () => {
-    // dispatch(followUserAction(id));
+    dispatch(followUserAction(id));
     setIsFollowing(true);
   };
 
   const handleUnfollow = () => {
-    // dispatch(unfollowUserAction(id));
+    dispatch(unfollowUserAction(id));
     setIsFollowing(false);
   };
 
@@ -110,14 +118,16 @@ const Profile = () => {
         <div className="p-5">
           <div>
             <h1 className="py-1 font-bold text-xl">
-              {user.otherProfile.data?.firstName + " " + user.otherProfile.data?.lastName}
+              {user.otherProfile.data?.firstName +
+                " " +
+                user.otherProfile.data?.lastName}
             </h1>
             <p>{user.otherProfile.data?.email.toLowerCase()}</p>
           </div>
           <div className="flex gap-2 items-center py-3">
             <span>{post.userPosts.length} posts</span>
-            <span>{user.otherProfile.data?.followersCount} followers</span>
-            <span>{user.otherProfile.data?.followingsCount} followings</span>
+            <span>{user.otherProfile.data?.followers.length} followers</span>
+            <span>{user.otherProfile.data?.followings.length} followings</span>
           </div>
 
           <div>
@@ -132,26 +142,40 @@ const Profile = () => {
               aria-label="wrapped label tabs example"
             >
               {tabs.map((item) => (
-                <Tab key={item.value} value={item.value} label={item.name} wrapped />
+                <Tab
+                  key={item.value}
+                  value={item.value}
+                  label={item.name}
+                  wrapped
+                />
               ))}
             </Tabs>
           </Box>
           <div className="flex justify-center">
             {value === "post" ? (
               <div className="space-y-5 w-[70%] my-10">
-                {post.userPosts.map((item) => (
-                  <div className="border border-slate-100 rounded-md" key={item.id}>
-                    <PostCard item={item} />
-                  </div>
-                ))}
+                {post.userPosts.length > 0 ? (
+                  post.userPosts.map((item) => (
+                    <div
+                      className="border border-slate-100 rounded-md"
+                      key={item.id}
+                    >
+                      <PostCard item={item} />
+                    </div>
+                  ))
+                ) : (
+                  <p>No posts.</p>
+                )}
               </div>
             ) : value === "reels" ? (
               <div className="flex justify-center flex-wrap gap-2 my-10">
-                {post.userPosts.filter(post => post.type === 'reel').map((item) => (
-                  <div key={item.id}>
-                    <UserReelCard />
-                  </div>
-                ))}
+                {post.userPosts
+                  .filter((post) => post.type === "reel")
+                  .map((item) => (
+                    <div key={item.id}>
+                      <UserReelCard />
+                    </div>
+                  ))}
               </div>
             ) : value === "saved" ? (
               <div className="space-y-5 w-[70%] my-10">
@@ -170,11 +194,16 @@ const Profile = () => {
               </div>
             ) : value === "repost" ? (
               <div className="space-y-5 w-[70%] my-10">
-                {post.userPosts.filter(post => post.reposted).map((item) => (
-                  <div className="border border-slate-100 rounded-md" key={item.id}>
-                    <PostCard item={item} />
-                  </div>
-                ))}
+                {post.userPosts
+                  .filter((post) => post.reposted)
+                  .map((item) => (
+                    <div
+                      className="border border-slate-100 rounded-md"
+                      key={item.id}
+                    >
+                      <PostCard item={item} />
+                    </div>
+                  ))}
               </div>
             ) : (
               ""

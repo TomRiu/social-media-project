@@ -27,13 +27,11 @@ export default function ProfileModal({ open, handleClose }) {
   const dispatch = useDispatch();
   const { auth, post, user } = useSelector((store) => store);
 
-  const handleSubmit = (values) => {
-    console.log("values ", values);
-  };
   const formik = useFormik({
+    enableReinitialize: true,
     initialValues: {
-      firstName: user.profile.data.firstName,
-      lastName: user.profile.data.lastName
+      firstName: user.profile.data?.firstName,
+      lastName: user.profile.data?.lastName
     },
     onSubmit: (values) => {
       console.log("values ", values);

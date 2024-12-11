@@ -19,6 +19,12 @@ import {
     FETCH_SAVED_POSTS_REQUEST,
     FETCH_SAVED_POSTS_SUCCESS,
     FETCH_SAVED_POSTS_FAILURE,
+    FOLLOW_USER_REQUEST,
+    FOLLOW_USER_SUCCESS,
+    FOLLOW_USER_FAILURE,
+    UNFOLLOW_USER_REQUEST,
+    UNFOLLOW_USER_SUCCESS,
+    UNFOLLOW_USER_FAILURE,
 } from './user.types';
 
 const initialState = {
@@ -182,7 +188,7 @@ export const userReducer = (state = initialState, action) => {
                     loading: false,
                     data: isAlreadySaved
                         ? state.savedPosts.data.filter(post => post.id !== updatedPost.id)
-                        : [...(state.savedPosts.data || []), updatedPost], 
+                        : [...(state.savedPosts.data || []), updatedPost],
                     error: null,
                 },
             };
@@ -223,6 +229,78 @@ export const userReducer = (state = initialState, action) => {
                     loading: false,
                     error: action.payload,
                 },
+            };
+
+        // Follow User
+        case FOLLOW_USER_REQUEST:
+            return {
+                ...state,
+                loading: true,
+                error: null,
+            };
+        case FOLLOW_USER_SUCCESS:
+            return {
+                ...state,
+                profile: {
+                    ...state.profile,
+                    data: {
+                        ...state.profile.data,
+                        followings: [...state.profile.data.followings, action.payload.receiveFollowId],
+                    },
+                },
+                otherProfile: {
+                    ...state.otherProfile,
+                    data: {
+                        ...state.otherProfile.data,
+                        followers: [...state.otherProfile.data.followers, action.payload.doFollowId],
+                    }
+                },
+                loading: false,
+                error: null,
+            };
+        case FOLLOW_USER_FAILURE:
+            return {
+                ...state,
+                loading: false,
+                error: action.payload,
+            };
+
+        // Unfollow User
+        case UNFOLLOW_USER_REQUEST:
+            return {
+                ...state,
+                loading: true,
+                error: null,
+            };
+        case UNFOLLOW_USER_SUCCESS:
+            return {
+                ...state,
+                profile: {
+                    ...state.profile,
+                    data: {
+                        ...state.profile.data,
+                        followings: state.profile.data.followings.filter(
+                            (id) => id !== action.payload.receiveUnFollowId
+                        ),
+                    },
+                },
+                otherProfile: {
+                    ...state.otherProfile,
+                    data: {
+                        ...state.otherProfile.data,
+                        followers: state.otherProfile.data.followers.filter(
+                            (id) => id !== action.payload.doUnFollowId
+                        ),
+                    },
+                },
+                loading: false,
+                error: null,
+            };
+        case UNFOLLOW_USER_FAILURE:
+            return {
+                ...state,
+                loading: false,
+                error: action.payload,
             };
 
         // Default

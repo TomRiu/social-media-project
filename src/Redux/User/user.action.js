@@ -20,6 +20,12 @@ import {
   FETCH_SAVED_POSTS_REQUEST,
   FETCH_SAVED_POSTS_SUCCESS,
   FETCH_SAVED_POSTS_FAILURE,
+  FOLLOW_USER_REQUEST,
+  FOLLOW_USER_SUCCESS,
+  FOLLOW_USER_FAILURE,
+  UNFOLLOW_USER_REQUEST,
+  UNFOLLOW_USER_SUCCESS,
+  UNFOLLOW_USER_FAILURE,
 } from './user.types';
 import { api, API_BASE_URL } from '../../config/api';
 
@@ -105,10 +111,10 @@ export const savePostAction = (postId) => async (dispatch) => {
   }
 }
 
-export const getSavedPostsAction = () => async (dispatch) => {
+export const getSavedPostsAction = (userId) => async (dispatch) => {
   dispatch({ type: FETCH_SAVED_POSTS_REQUEST });
   try {
-    const { data } = await api.get(`/api/users/save`);
+    const { data } = await api.get(`/api/users/save/${userId}`);
 
     dispatch({ type: FETCH_SAVED_POSTS_SUCCESS, payload: data });
   } catch (error) {
@@ -119,50 +125,32 @@ export const getSavedPostsAction = () => async (dispatch) => {
   }
 };
 
+export const followUserAction = (userId) => async (dispatch) => {
+  dispatch({ type: FOLLOW_USER_REQUEST });
+  try {
+    const { data } = await api.post(`/api/users/follow/${userId}`);
+    dispatch({ type: FOLLOW_USER_SUCCESS, payload: data });
+    console.log("Followed user successfully:", data);
+  } catch (error) {
+    console.error("Error following user:", error);
+    dispatch({
+      type: FOLLOW_USER_FAILURE,
+      payload: error.response?.data?.message || "Failed to follow user.",
+    });
+  }
+};
 
-// export const getProfileAction = (jwt) => async (dispatch) => {
-//     dispatch({ type: GET_PROFILE_REQUEST })
-//     try {
-//         const { data } = await axios.get(`${API_BASE_URL}/api/users/profile`, {
-//             headers: {
-//                 "Authorization": `Bearer ${jwt}`
-//             }
-//         })
-
-
-//         dispatch({ type: GET_PROFILE_SUCCESS, payload: data })
-//         console.log("profile ---", data)
-
-//     } catch (error) {
-//         console.log("-----", error)
-//         dispatch({ type: GET_PROFILE_FAILURE, payload: error })
-//     }
-// }
-
-// export const updateProfileAction = (reqData) => async (dispatch) => {
-//     dispatch({ type: UPDATE_PROFILE_REQUEST })
-//     try {
-//         const { data } = await api.put(`${API_BASE_URL}/api/users`, reqData)
-
-
-//         dispatch({ type: UPDATE_PROFILE_SUCCESS, payload: data })
-//         console.log("update profile ---", data)
-
-//     } catch (error) {
-//         console.log("-----", error)
-//         dispatch({ type: UPDATE_PROFILE_FAILURE, payload: error })
-//     }
-// }
-
-// export const searchUser = (query) => async (dispatch) => {
-//     dispatch({ type: SEARCH_USER_REQUEST })
-//     try {
-//         const { data } = await api.get(`/api/users/search?query=${query}`)
-//         dispatch({ type: SEARCH_USER_SUCCESS, payload: data })
-//         console.log("search user ---", data)
-
-//     } catch (error) {
-//         console.log("-----", error)
-//         dispatch({ type: SEARCH_USER_FAILURE, payload: error })
-//     }
-// }
+export const unfollowUserAction = (userId) => async (dispatch) => {
+  dispatch({ type: UNFOLLOW_USER_REQUEST });
+  try {
+    const { data } = await api.post(`/api/users/unfollow/${userId}`);
+    dispatch({ type: UNFOLLOW_USER_SUCCESS, payload: data });
+    console.log("Unfollowed user successfully:", data);
+  } catch (error) {
+    console.error("Error unfollowing user:", error);
+    dispatch({
+      type: UNFOLLOW_USER_FAILURE,
+      payload: error.response?.data?.message || "Failed to unfollow user.",
+    });
+  }
+};
