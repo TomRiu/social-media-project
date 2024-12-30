@@ -9,20 +9,20 @@ import { resetAuthAction } from "../../Redux/Auth/auth.action";
 
 const SideBar = () => {
   const dispatch = useDispatch();
-  const auth = useSelector(store => store.auth);
-  const user = useSelector(store => store.user);
+  const auth = useSelector((store) => store.auth);
+  const user = useSelector((store) => store.user);
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
-  
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
-  
+
   const handleClose = () => {
     setAnchorEl(null);
   };
-  
+
   const handleNavigate = (item) => {
     if (item.title === "Profile") {
       navigate(`/profile/${user.profile.data?.id}`);
@@ -30,12 +30,12 @@ const SideBar = () => {
       navigate(item.path);
     }
   };
-  
+
   const handleLogout = () => {
     dispatch(resetAuthAction());
     navigate("/login");
   };
-  
+
   return (
     <Card className="card h-screen flex flex-col justify-between py-5">
       <div className="space-y-8 pl-5">
@@ -61,11 +61,15 @@ const SideBar = () => {
         <div className="pl-5 flex items-center justify-between pt-5">
           <div className="flex items-center space-x-3">
             <Avatar src="https://cdn-icons-png.flaticon.com/512/14996/14996907.png" />
-            <div>
-              <p className="font-bold">
-                {user.profile.data?.firstName + " " + user.profile.data?.lastName}
+            <div className="hidden sm:block">
+              <p className="font-bold text-sm">
+                {user.profile.data?.firstName +
+                  " " +
+                  user.profile.data?.lastName}
               </p>
-              <p className="opacity-70">{user.profile.data?.email.toLowerCase()}</p>
+              <p className="text-gray-600 text-sm truncate max-w-[150px]">
+                {user.profile.data?.email.toLowerCase()}
+              </p>
             </div>
           </div>
           <div>
