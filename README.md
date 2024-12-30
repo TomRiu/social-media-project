@@ -1,6 +1,6 @@
 # Social Media Website
 
-This repository contains the source code and documentation for a dynamic **Social Media Platform** developed as product of Basic Internship subject in **Posts and Telecommunications Institute of Technology**. 
+This repository contains the source code and documentation for a dynamic **Social Media Platform** developed as product of Basic Internship subject in **Posts and Telecommunications Institute of Technology**.
 
 The project aims to enhance connectivity, user engagement, and content sharing through a user-friendly and feature-rich platform.
 
@@ -9,22 +9,27 @@ The project aims to enhance connectivity, user engagement, and content sharing t
 ## Features
 
 ### Authentication and User Management
+
 - Secure user registration, login, and logout.
 - Password recovery using email verification.
 - Profile view and editing.
 - Follow and unfollow users.
 
 ### Post Interactions
+
 - Create, like/unlike, save/unsave, and delete posts.
 - Add comments to posts.
 
 ### Real-Time Communication
+
 - Real-time chat functionality using WebSocket API.
 
 ### Search and Discovery
+
 - Search for users and posts with advanced filters.
 
 ### Responsive Design
+
 - Optimized for performance across various devices and screen sizes.
 
 ---
@@ -32,6 +37,7 @@ The project aims to enhance connectivity, user engagement, and content sharing t
 ## Technologies Used
 
 ### Frontend
+
 - **HTML, CSS, JavaScript**: Structure and basic interactivity.
 - **React.js**: Component-based UI development.
 - **Redux**: State management.
@@ -40,6 +46,7 @@ The project aims to enhance connectivity, user engagement, and content sharing t
 - **Formik**: Form management and validation.
 
 ### Backend
+
 - **Java**: Programming language for backend development.
 - **Spring Boot**: Backend framework for API development.
 - **Spring Security**: Authentication and authorization.
@@ -50,17 +57,21 @@ The project aims to enhance connectivity, user engagement, and content sharing t
 - **Lombok**: Reduces boilerplate code.
 
 ### Database
+
 - **MySQL**: Relational database for storing user and platform data.
 
 ### Real-Time Features
+
 - **WebSocket API**: Enables instant messaging capabilities.
 
-
 ### Media Storage
+
 - **Cloudinary API**: Secure and efficient image storage.
+
 ---
 
 ## Project Structure
+
 - **Frontend**: Located in the `frontend` directory.
 - **Backend**: Located in the `backend` directory.
 - **Documents**: Having all relevant documentation in the `documents` directory.
@@ -71,24 +82,29 @@ The project aims to enhance connectivity, user engagement, and content sharing t
 ## Installation
 
 ### Prerequisites
-- ReactJS and npm
+
+- Node.js and npm
 - Java (JDK 17 or above)
 - MySQL
 
 ### Steps
+
 1. Clone the repository:
+
    ```bash
    git clone https://github.com/TomRiu/social-media-project.git
    cd social-media-website
    ```
 
 2. Set up the backend:
+
    ```bash
    cd server
    ./mvnw spring-boot:run
    ```
 
 3. Set up the frontend:
+
    ```bash
    cd client
    npm install
@@ -96,64 +112,97 @@ The project aims to enhance connectivity, user engagement, and content sharing t
    ```
 
 4. Configure the database and email address:
-    - Update the `application.properties` file in the `backend` directory with your MySQL and email application credentials.
+   - Update the `application.properties` file in the `backend` directory with your MySQL and email application credentials.
 
 ---
 
 ## Demo
 
 ### Screenshots
+
 Below are some screenshots demonstrating the application features:
 
 1. **Register Page**
-    ![Register Page](images/register.png)
+<div align="center">
+  <img src="images/register.png" alt="Registration Interface" width="700"/>
+  <p><em>User Registration - Simple and secure sign-up process</em></p>
+</div>
 
 2. **Login Page**
-   ![Login Page](images/login.png)
+<div align="center">
+  <img src="images/login.png" alt="Login Interface" width="700"/>
+  <p><em>Login Page - Clean and intuitive login experience</em></p>
+</div>
 
 3. **Forgot Password**
-   ![Forgot Password](images/forgot-password.png)
+<div align="center">
+  <img src="images/forgot-password.png" alt="Password Recovery" width="700"/>
+  <p><em>Password Recovery - Easy password reset through email verification</em></p>
+</div>
 
 4. **Reset Password**
-   ![Reset Password](images/reset-password.png)
+<div align="center">
+  <img src="images/reset-password.png" alt="Password Recovery" width="700"/>
+  <p><em>Reset Password - Get by email link to reset password</em></p>
+</div>
 
 5. **Create Post**
-   ![Create Post](images/create-post.png)
+<div align="center">
+  <img src="images/create-post.png" alt="Post Creation" width="700"/>
+  <p><em>Post Creation - Rich media sharing capabilities</em></p>
+</div>
 
 6. **Home and Search**
-   ![Home and Search](images/home-and-search.png)
+<div align="center">
+  <img src="images/home-and-search.png" alt="Home Feed and Search" width="700"/>
+  <p><em>Home Feed & Search - Discover and explore content</em></p>
+</div>
 
 7. **Like, Comment, Save Posts**
-   ![Like, Comment, Save Posts](images/like-comment-save.png)
-
+<div align="center">
+  <img src="images/like-comment-save.png" alt="Post Interactions" width="700"/>
+  <p><em>Post Interactions - Engage with content through likes, comments, and saves</em></p>
+</div>
 
 8. **Get My Profile with My Posts**
-   ![Get My Profile with My Posts](images/get-me-post.png)
+<div align="center">
+  <img src="images/get-me-post.png" alt="Personal Profile View" width="700"/>
+  <p><em>Personal Profile - View and manage your posts</em></p>
+</div>
 
 9. **Get My Profile with My Saved Posts**
-   ![Get My Profile with My Saved Posts](images/get-me-saved-post.png)
+<div align="center">
+  <img src="images/get-me-saved-post.png" alt="Saved Posts View" width="700"/>
+  <p><em>Saved Content - Access your curated collection of saved posts</em></p>
+</div>
 
 10. **Other User Profile**
-   ![Other User Profile](images/other-profile.png)
+<div align="center">
+  <img src="images/other-profile.png" alt="Other User Profile View" width="700"/>
+  <p><em>User Profiles - Connect with other users</em></p>
+</div>
 
 11. **Real-Time Chat and Messaging**
-   ![Real-Time Chat and Messaging](images/chat-and-message.png)
+<div align="center">
+  <img src="images/chat-and-message.png" alt="Chat Interface" width="700"/>
+  <p><em>Real-time chat with WebSocket technology</em></p>
+</div>
 
+## Documentation
 
-### PDF Document
-A detailed documentation of the project is available in the [documentation.pdf](documents/FINAL_REPORT_OF_BASIC_INTERNSHIP.pdf) file.
-
-### Presentation Walkthrough
-A complete walkthrough of the platform is included in the [presentation.pptx](documents/SOCIAL_MEDIA_WEBSITE_PRESENTATION.pptx) file.
+- Full documentation: [FINAL_REPORT_OF_BASIC_INTERNSHIP.pdf](documents/FINAL_REPORT_OF_BASIC_INTERNSHIP.pdf)
+- Project presentation: [SOCIAL_MEDIA_WEBSITE_PRESENTATION.pptx](documents/SOCIAL_MEDIA_WEBSITE_PRESENTATION.pdf)
 
 ---
 
 ## License
+
 This project is licensed under the [MIT License](LICENSE).
 
 ---
 
 ## Future Enhancements
+
 - **Notifications**: Real-time updates for likes, comments, and follows.
 - **Stories**: Temporary posts similar to other social media platforms.
 - **Reels**: Short-form video content creation and viewing.
@@ -162,7 +211,9 @@ This project is licensed under the [MIT License](LICENSE).
 ---
 
 ## Contributing
+
 Contributions are welcome! Please follow these steps:
+
 1. Fork the repository.
 2. Create a feature branch.
 3. Submit a pull request with a detailed description of your changes.
@@ -170,6 +221,7 @@ Contributions are welcome! Please follow these steps:
 ---
 
 ## Acknowledgments
+
 Special thanks to **Kim Ngọc Bách**, the guiding lecturer, and everyone who contributed to this project.
 
 ---
