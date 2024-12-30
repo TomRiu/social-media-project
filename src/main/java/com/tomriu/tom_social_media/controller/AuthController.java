@@ -122,11 +122,11 @@ public class AuthController {
 	            message.setText("To reset your password, click the link below:\n" + resetUrl);
 	            mailSender.send(message);
 
-	            return new AuthResponse("Password reset email sent.", "Success");
+	            return new AuthResponse("Success", "Password reset email sent.");
 	        } catch (UserException e) {
-	            return new AuthResponse(e.getMessage(), "Failure");
+	            return new AuthResponse("Failure", e.getMessage());
 	        } catch (Exception e) {
-	            return new AuthResponse("An error occurred while processing the request.", "Failure");
+	            return new AuthResponse("Failure", "An error occurred while processing the request.");
 	        }
 	    }
 	    
@@ -141,16 +141,21 @@ public class AuthController {
 		            User user = userService.getUserByPasswordResetToken(token);
 		            userService.changeUserPassword(user, newPassword);
 		            
-		            passwordResetToken.setExpiryDate(LocalDateTime.now().minusHours(1));
+		            passwordResetToken.setExpiryDate(LocalDateTime.now());
 		            
-		            return new AuthResponse("Password has been successfully reset.", "Success");
-	            }
+		            passwordResetTokenRepository.save(passwordResetToken);
+		            
+		            return new AuthResponse("Success", "Password has been successfully reset.");
+	            } 
+	            
+	            passwordResetTokenRepository.delete(passwordResetToken);
 	            
 	            throw new UserException("Token is expired");
 	        } catch (UserException e) {
-	            return new AuthResponse(e.getMessage(), "Failure");
+	            return new AuthResponse("Failure", e.getMessage());
 	        } catch (Exception e) {
-	            return new AuthResponse("An error occurred while resetting the password.", "Failure");
+	        	e.printStackTrace();
+	            return new AuthResponse("Failure", "An error occurred while resetting the password.");
 	        }
 	    }
 }
