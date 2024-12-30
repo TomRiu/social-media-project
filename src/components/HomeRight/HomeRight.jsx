@@ -9,7 +9,7 @@ const HomeRight = () => {
     <div className="pr-5">
       <SearchUser />
 
-      <Card className="p-5">
+      {/* <Card className="p-5">
         <div className="flex justify-between py-5 items-center">
           <p className="font-semibold opacity-70">Suggestions for you</p>
           <p className="text-xs font-semibold opacity-95">View All</p>
@@ -19,7 +19,7 @@ const HomeRight = () => {
             <PopularUserCard />
           ))}
         </div>
-      </Card>
+      </Card> */}
     </div>
   );
 };

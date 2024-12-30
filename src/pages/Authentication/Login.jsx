@@ -107,6 +107,17 @@ const Login = () => {
           Register
         </Button>
       </div>
+      <div className="flex gap-2 items-center justify-center pt-5">
+        <p>If you forgot password?</p>
+        <Button
+          onClick={() => {
+            dispatch(resetAuthAction());
+            navigate("/forgot-password");
+          }}
+        >
+          Forgot Password
+        </Button>
+      </div>
     </>
   );
 };

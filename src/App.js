@@ -9,12 +9,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import ProtectedRoute from './components/ProtectedRoute';
 import Login from './pages/Authentication/Login';
 import Register from './pages/Authentication/Register';
-import ForgotPassword from './components/ForgotPassword';
-import ResetPassword from './components/ResetPassword';
 import Profile from './pages/Profile/Profile'; // Import Profile directly
 import Reels from './components/Reels/Reels';
 import CreateReelsForm from './components/Reels/CreateReelsForm';
 import { getProfileAction } from './Redux/User/user.action';
+import ForgotPassword from './pages/Authentication/ForgotPassword';
+import ResetPassword from './pages/Authentication/ResetPassword';
 
 function App() {
   const auth = useSelector(store => store.auth);

@@ -28,7 +28,7 @@ const MiddlePart = () => {
 
   return (
     <div className="px-20">
-      <section className="flex items-center p-5 rounded-b-md">
+      {/* <section className="flex items-center p-5 rounded-b-md">
         <div className="flex flex-col items-center mr-4 cursor-pointer">
           <Avatar sx={{ width: "5rem", height: "5rem" }}>
             <AddIcon sx={{ fontSize: "3rem" }} />
@@ -38,7 +38,7 @@ const MiddlePart = () => {
         {story.map((item) => (
           <StoryCircle />
         ))}
-      </section>
+      </section> */}
       <Card className="p-5 mt-5">
         <div className="flex justify-between">
           <Avatar />

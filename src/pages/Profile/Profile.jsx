@@ -169,8 +169,7 @@ const Profile = () => {
               </div>
             ) : value === "reels" ? (
               <div className="flex justify-center flex-wrap gap-2 my-10">
-                {post.userPosts
-                  .filter((post) => post.type === "reel")
+                {[1, 1, 1, 1]
                   .map((item) => (
                     <div key={item.id}>
                       <UserReelCard />
