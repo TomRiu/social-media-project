@@ -99,20 +99,21 @@ The project aims to enhance connectivity, user engagement, and content sharing t
 2. Set up the backend:
 
    ```bash
-   cd server
+   cd backend
    ./mvnw spring-boot:run
    ```
 
 3. Set up the frontend:
 
    ```bash
-   cd client
+   cd frontend
    npm install
    npm start
    ```
 
-4. Configure the database and email address:
-   - Update the `application.properties` file in the `backend` directory with your MySQL and email application credentials.
+4. Configure the application:
+   - Update the `application.properties` file in the `backend` directory with your local MySQL and email application credentials.
+   - Update the `src/utils/uploadCloud.js` file in the `frontend` directory with your cloud name of Cloudinary.
 
 ---
 
